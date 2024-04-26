@@ -19,19 +19,21 @@ function updateVideoFrame() {
         .catch(error => console.error('Error fetching video frame:', error));
 }
 
-// Function to load the plot image
 function loadPlotImage() {
     fetch('/get_plot')
-    .then(response => response.json())
-    .then(data => {
-        if(data.image_url) {
-            const plotImage = document.getElementById('plotImage');
-            plotImage.src = data.image_url;
-        } else {
-            console.error('No image found or multiple images exist.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.image_url) {
+                document.getElementById('plotImage').src = data.image_url;
+            } else {
+                console.error('No image found or multiple images exist.');
+                document.getElementById('plotContainer').innerHTML = '<p>No plot image available.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('plotContainer').innerHTML = '<p>Error loading plot image.</p>';
+        });
 }
 
 

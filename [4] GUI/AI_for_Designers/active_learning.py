@@ -329,9 +329,18 @@ class ActiveLearning:
                 raise ValueError('you did an oopsie')
 
             # Return the label and the margin
-            return get_id_to_label, margin
 
-   
+            self.write_margin_to_file(new_label, margin * 100)  # Pass margin as percentage
+
+            return get_id_to_label, margin
+        
+    def write_margin_to_file(self, label, margin):
+        """Writes the label and its certainty margin to a file in the 'session_data' directory."""
+        file_path = "session_data/label_certainty.txt"  # Adjust the path to the correct folder
+        with open(file_path, 'w') as file:  # 'w' mode to overwrite each time
+            file.write(f'{label}: {margin:.2f}%\n')
+
+      
 
     def identify(self, id, les_probs: dict[str, float] | None = None, process: str = '',
                  progress: list[int] | None = None) -> str:
@@ -398,6 +407,7 @@ class ActiveLearning:
             # Make a list of the unlabeled ids and sort it
             unlbld = list(self.unlabeled_ids)
             unlbld.sort()
+            
             # Iterate for the length of datapoints that you have not yet labeled
             for i in range(sorted_preds.shape[0]):
                 # Subtract from the most certain class the second to most certain class

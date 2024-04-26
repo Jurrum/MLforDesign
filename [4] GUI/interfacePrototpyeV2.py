@@ -99,6 +99,18 @@ def setup():
         return redirect(url_for('preprocessing'))
     return render_template('setup.html')
 
+def clear_directory(directory):
+    """Removes all files in the specified directory."""
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
 @app.route('/preprocessing', methods=['GET', 'POST'])
 def preprocessing():
     product_name = session.get('product_name')
@@ -106,6 +118,11 @@ def preprocessing():
     frame_offset = session.get('frame_offset')
     
     if request.method == 'POST':
+
+        # Clear the plot images directory
+        plot_dir = os.path.join(app.root_path, 'static', 'plots')
+        clear_directory(plot_dir)
+        
         print(request.files)  # Debug: Print the files received
         accelerometer_file = request.files.get('accelerometer_file')
         gyroscope_file = request.files.get('gyroscope_file')
@@ -302,18 +319,40 @@ def get_video_frame():
 
     return video_html_content
 
+
 @app.route('/get_plot')
 def get_plot():
     try:
-        plot_folder = os.path.join(app.root_path, 'static', 'plots')
-        plot_files = [f for f in os.listdir(plot_folder) if f.startswith('plot_to_label') and f.endswith('.png')]
+        # Source directory where the plots are initially located
+        source_folder = os.path.join(app.root_path, '..', 'session_data', 'plots')
+
+        print("Source folder:", source_folder)
+        
+        # Destination directory inside the static folder where the plots should be copied to
+        dest_folder = os.path.join(app.root_path, 'static', 'plots')
+        
+        # Ensure the destination directory exists
+        os.makedirs(dest_folder, exist_ok=True)
+        
+        # Find the latest plot image in the source directory
+        plot_files = [f for f in os.listdir(source_folder) if f.startswith('plot_to_label') and f.endswith('.png')]
         if not plot_files:
             return jsonify(error="No plot file found"), 404
-        latest_plot = max(plot_files, key=lambda x: os.path.getmtime(os.path.join(plot_folder, x)))
+       
+        
+        latest_plot = max(plot_files, key=lambda x: os.path.getmtime(os.path.join(source_folder, x)))
+        source_file_path = os.path.join(source_folder, latest_plot)
+        dest_file_path = os.path.join(dest_folder, latest_plot)
+        
+        # Copy the latest plot file to the static directory
+        copy2(source_file_path, dest_file_path)
+        
+        # Generate the URL for the image
         image_url = url_for('static', filename=f'plots/{latest_plot}')
         return jsonify(image_url=image_url)
     except OSError as e:
         return jsonify(error=f"Error accessing or moving the plot file: {e}"), 500
+
 
 
 
