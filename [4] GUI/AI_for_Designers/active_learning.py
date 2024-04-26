@@ -552,7 +552,7 @@ class ActiveLearning:
             x, y = zip(*temp_pca)
             plt.scatter(x, y, label=label)
         
-        static_plots_folder = os.path.join('app.root_path', 'static', 'plots')
+        static_plots_folder = os.path.join('session_data', 'plots')
         if not os.path.exists(static_plots_folder):
             os.makedirs(static_plots_folder, exist_ok=True)
 
