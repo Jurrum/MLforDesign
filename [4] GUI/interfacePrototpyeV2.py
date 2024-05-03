@@ -82,6 +82,8 @@ def setup():
         active_iterations = int(request.form.get('active_learning_iterations'))
         labels = [value for key, value in request.form.items() if key.startswith('label_') and value]
 
+        print("Full form data:", dict(request.form))
+
         # Store data in session
         session['product_name'] = product_name
         session['frame_size'] = frame_size
@@ -91,7 +93,7 @@ def setup():
         session['label_submission_count'] = 0  # Initialize the counter
 
 
-        print("Session Data:", session)  # Debug print
+        # print("Session Data:", session)  # Debug print
         print("the name and frames should now be stored")
 
 

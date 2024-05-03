@@ -23,8 +23,8 @@ function addLabelInput() {
     labelCount++;
     let labelDiv = document.getElementById('labelInputs');
     let newLabelDiv = document.createElement('div');
-    newLabelDiv.id = `labelDiv_${labelCount}`;
-    newLabelDiv.innerHTML = `<label for="label_${labelCount}">Label ${labelCount}:</label>
+    newLabelDiv.id = `label_${labelCount}`;
+    newLabelDiv.innerHTML = `<label for="label_${labelCount}">Expected behavior ${labelCount}:</label>
                              <input type="text" id="label_${labelCount}" name="label_${labelCount}"><br><br>`;
     labelDiv.appendChild(newLabelDiv);
 }
@@ -32,7 +32,7 @@ function addLabelInput() {
 function removeLabelInput() {
     if (labelCount > 3) {
         let labelDiv = document.getElementById('labelInputs');
-        let lastLabelDiv = document.getElementById(`labelDiv_${labelCount}`);
+        let lastLabelDiv = document.getElementById(`label_${labelCount}`);
         if (lastLabelDiv) {
             labelDiv.removeChild(lastLabelDiv);
             labelCount--;
