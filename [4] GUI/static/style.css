@@ -43,11 +43,11 @@ nav ul li a {
 /* Main content section */
 main {
     padding: 20px;
+    margin: 1.5rem;
 }
 
 /* Button styles */
 button,
-.submit-button input[type="submit"],
 .label-control-buttons button {
     padding: 10px 20px;
     font-size: 16px;
@@ -58,6 +58,23 @@ button,
     transition: background-color 0.3s ease, color 0.3s ease;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-right: 30%;
+}
+
+.submit-button input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+    background-color: var(--secondary-color);
 }
 
 /* Primary button style */
@@ -100,7 +117,7 @@ ol {
 
 li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;;
     margin-bottom: 10px;
     line-height: 1.4;
 }
@@ -183,13 +200,6 @@ li::before {
     border-radius: 5px; /* Ensure rounded corners */
 }
 
-/* CSS for the parent container */
-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
 
 /* CSS for the timeline and table container */
 .timeline-and-table-container {
