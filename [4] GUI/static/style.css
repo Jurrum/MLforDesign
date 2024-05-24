@@ -1,0 +1,252 @@
+/* Define reusable colors */
+:root {
+    --primary-color: #007BFF;
+    --secondary-color: #FF6C40;
+    --button-bg-color: #707070;
+    --button-hover-bg-color: #45a049;
+    --label-bg-color: #337AB7;
+}
+
+/* Reset some default styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Common styles for header and footer */
+header,
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+/* Navigation menu styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Main content section */
+main {
+    padding: 20px;
+    margin: 1.5rem;
+}
+
+/* Button styles */
+button,
+.label-control-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-right: 30%;
+}
+
+.submit-button input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+    background-color: var(--secondary-color);
+}
+
+/* Primary button style */
+button {
+    background-color: var(--button-bg-color);
+}
+
+/* Secondary button styles by their IDs */
+#playButton {
+    background-color: var(--primary-color);
+}
+
+#pauseButton {
+    background-color: var(--secondary-color);
+}
+
+/* Label button style */
+.label-button {
+    background-color: var(--label-bg-color);
+}
+
+/* Hover and focus styles for all buttons */
+button:hover,
+button:focus,
+.submit-button input[type="submit"]:hover,
+.submit-button input[type="submit"]:focus,
+.label-control-buttons button:hover,
+.label-control-buttons button:focus {
+    background-color: var(--button-hover-bg-color);
+}
+
+/* Style the ::marker in an ordered list */
+ol {
+    list-style-type: none;
+    counter-reset: my-counter;
+    padding-left: 0;
+    text-align: center;
+    font-weight: 100;
+}
+
+li {
+    display: flex;
+    align-items: flex-start;;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+li::before {
+    width: 1.5em;
+    font-weight: bold;
+    color: #000000;
+    margin-right: 10px;
+}
+
+#timeLabelContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px; /* Space between this container and the video player */
+}
+
+#videoTimer,
+#labelDisplay {
+    flex: 1; /* Each takes up equal space */
+    padding: 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 5px; /* Space between the two elements */
+}
+
+#videoContainer {
+    margin: 5px auto; /* Reduced margin */
+    display: block;
+}
+
+#videoTimelineContainer {
+    width: 640px;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    margin-top: 10px; /* Adjust space above the timeline */
+    margin-bottom: 10px; /* Adjust space below the timeline */
+}
+
+#videoTimeline {
+    width: 0%;
+    height: 100%;
+    background-color: var(--primary-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#scrubber {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 0;
+    transform: translate(-50%, -50%); /* Center the scrubber horizontally and vertically on the timeline start */
+    z-index: 2; /* Ensure it's above the progress bar */
+}
+
+#labelTimelineContainer {
+    width: 640px;
+    height: 50px; /* Increase height to accommodate label segments */
+    background-color: #ddd;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    margin: 10px auto; /* Adjusted margin for centering */
+}
+
+.label-segment {
+    height: 100%;
+    border-radius: 5px; /* Ensure rounded corners */
+}
+
+
+/* CSS for the timeline and table container */
+.timeline-and-table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed */
+}
+
+/* CSS for the timeline container */
+#labelTimelineContainer {
+    width: 640px; /* Same width as the timeline container */
+    margin-top: 20px; /* Adjust as needed */
+}
+
+/* CSS for the dynamic insights table container */
+.insights-table-container {
+    width: 100%; /* Same width as the timeline container */
+    margin-top: 20px; /* Adjust as needed */
+}
+
+/* CSS for the dynamic insights table */
+.insights-table {
+    width: 100%; /* Occupy full width of the container */
+    border-collapse: collapse;
+}
+
+.insights-table th, .insights-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.insights-table th {
+    background-color: #f2f2f2;
+}
+
+.insights-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.insights-table tr:hover {
+    background-color: #ddd;
+}
+
+#labelLegend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

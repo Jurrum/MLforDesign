@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}New Data Processing{% endblock %}
+
+{% block content %}
+<section>
+    <h2>New Data Processing</h2>
+    <p>Use the trained model to analyze new data and gain insights.</p>
+
+    <!-- Form for uploading new data -->
+    <form action="{{ url_for('new_data') }}" method="post" enctype="multipart/form-data">
+        <label for="new_data_file">Upload New Data:</label>
+        <input type="file" id="new_data_file" name="new_data_file" required><br><br>
+
+        <input type="submit" value="Process New Data">
+    </form>
+
+    <!-- Section for displaying the results of new data processing -->
+    <div id="new_data_results">
+        <!-- Dynamically load and display processing results here -->
+    </div>
+</section>
+{% endblock %}

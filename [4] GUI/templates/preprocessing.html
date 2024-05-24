@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Preprocessing{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Data Preprocessing</h2>
+    <!-- Preprocessing-specific content like forms for file uploads goes here -->
+    <form action="{{ url_for('preprocessing') }}" method="post" enctype="multipart/form-data">
+        <!-- Example: File upload for accelerometer data -->
+        <label for="accelerometer_file">Accelerometer File:</label>
+        <input type="file" id="accelerometer_file" name="accelerometer_file" required><br><br>
+
+        <!-- Example: File upload for gyroscope data -->
+        <label for="gyroscope_file">Gyroscope File:</label>
+        <input type="file" id="gyroscope_file" name="gyroscope_file" required><br><br>
+
+        <!-- Example: File upload for video file of data -->
+        <label for="video_recording_file">Video file (Optional):</label>
+        <input type="file" id="video_recording_file" name="video_recording_file"><br><br>
+
+
+        <!-- Additional input fields and parameters as needed -->
+
+        <input type="submit" value="Submit">
+    </form>
+</section>
+{% endblock %}

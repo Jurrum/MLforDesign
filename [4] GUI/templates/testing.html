@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<section style="text-align: center;">
+    <h2>View your initial Results here</h2>
+    <p>View detailed insights and results from the machine learning analysis.</p>
+
+    <!-- Organizing Time and Label Display next to each other in a table for better alignment -->
+    <table style="margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td><div id="videoTimer" style="padding: 10px;">Time: 00:00</div></td>
+            <td><div id="labelDisplay" data-csv-url="{{ timestamp_url }}" style="padding: 10px;">Label will be displayed here</div></td>
+        </tr>
+    </table>
+
+    <!-- Video Container with minimal margin -->
+    <div id="videoContainer" style="width: 640px; height: 480px; margin: 5px auto; display: block;" data-video-url="{{ video_url }}">
+        <!-- Video will be inserted here via JavaScript -->
+    </div>
+
+    <!-- Legend for labels -->
+    <div id="labelLegend" style="margin-top: 10px; text-align: center;">
+        <!-- Legend items will be inserted here dynamically -->
+    </div>
+
+    <!-- Custom timeline for label appearance -->
+    <div id="labelTimelineContainer">
+        <!-- Colored label segments will be inserted here dynamically -->
+    </div>
+
+
+    <!-- Timeline div -->
+    <div style="margin: 5px auto; width: 640px; position: relative; cursor: pointer;" id="videoTimelineContainer">
+        <div id="scrubber"></div>
+        <div id="videoTimeline" value="0" max="100" style="width: 100%;"></div>
+    </div>
+
+    <!-- Play and Pause buttons next to each other -->
+    <div style="margin: 5px auto; display: flex; justify-content: center;">
+        <button id="playButton" style="margin-right: 10px;">Play</button>
+        <button id="pauseButton">Pause</button>
+    </div>
+
+    <div id="insightsTable"></div>
+
+
+    <!-- Link to the JavaScript -->
+    <script src="{{ url_for('static', filename='testing.js') }}"></script>
+</section>
+{% endblock %}
