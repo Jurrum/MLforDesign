@@ -64,3 +64,4 @@ plot_to_label**.png
 *.pyc
 **/session_data/**
 **/Preprocessed-data/**
+*.csv
