@@ -1,0 +1,8 @@
+flask
+flask_session
+numpy
+matplotlib
+IPython
+pandas
+scikit-learn
+plotly
