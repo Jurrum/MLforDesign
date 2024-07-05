@@ -1,1 +1,5 @@
 plot_to_label**.png
+*.pyc
+.DS_Store
+**/session_data/**
+**/Preprocessed-data/**
