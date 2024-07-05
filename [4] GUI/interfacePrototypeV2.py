@@ -48,15 +48,24 @@ def clear_session_data():
 
 def run_active_learning(product_name, frame_size, labels, iterations):
     
-    # Start the process
-    
     print(f"Starting active learning for {product_name}")
    
     initiate_active_learning(product_name, frame_size, labels, iterations, label_input_queue)
 
     print(f"Active learning finished {product_name}")
 
-   
+def clear_directory(directory):
+    """Removes all files in the specified directory."""
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
 
 
 # Route Handlers
@@ -75,47 +84,51 @@ def setup():
     print("Accessed /setup route")  # Debug print
 
     if request.method == 'POST':
-        # In the setup get the Name of the product, frame size and offset
+       
         product_name = request.form.get('product_name')
-        # frame_offset = float(request.form.get('frame_offset'))
-        # frame_size = float(request.form.get('frame_size'))
+
         active_iterations = int(request.form.get('active_learning_iterations'))
         labels = [value for key, value in request.form.items() if key.startswith('label_') and value]
 
-        print("Full form data:", dict(request.form))
-
-        # Store data in session
         session['product_name'] = product_name
-        # session['frame_size'] = frame_size
-        # session['frame_offset'] = frame_offset
         session['labels'] = labels
         session['active_learning_iterations'] = active_iterations
-        session['label_submission_count'] = 0  # Initialize the counter
-
-
-        # print("Session Data:", session)  # Debug print
-        print("the name and frames should now be stored")
-
+        session['label_submission_count'] = 0  
 
         session['completed_steps'].append('setup')
         return redirect(url_for('upload_data'))
     return render_template('setup.html')
 
-"""
-Reroute pages as follows:
-- Setup --> Remove frames
-- Upload data --> Upload MP4 file
-- Look at raw data --> new page, initiate active learning
-- Active learning --> 
-- Resulst page
-"""
 
 @app.route('/upload_data', methods=['GET', 'POST'])
 def upload_data():
-    print("Accessed /upload_data route")  # Debug print
-
     if request.method == 'POST':
-        
+        # Clear the plot images directory from previous sessions
+        plot_dir = os.path.join(app.root_path, 'static', 'plots')
+        clear_directory(plot_dir)
+
+        #Receive video file from user
+        video_recording_file = request.files.get('video_recording_file')
+
+        #If there is a video file (optional) it should be saved and copied as well   
+        video_filename = None
+        if video_recording_file and video_recording_file.filename:
+            
+            #Check folder exists
+            upload_folder = os.path.join(app.config['SESSION_FILE_DIR'], 'uploads')
+            static_folder = os.path.join(app.root_path, 'static', 'session_data', 'uploads')
+            create_directory_if_not_exists(upload_folder)
+            create_directory_if_not_exists(static_folder)
+            session['static_folder_path'] = static_folder
+            session['upload_folder_path'] = upload_folder
+
+            video_filename = secure_filename(video_recording_file.filename)
+            video_file_path = os.path.join(upload_folder, video_filename)
+            session['video_file_path'] = video_file_path
+            session['video_filename'] = video_filename
+            video_recording_file.save(video_file_path)
+            shutil.copy(video_file_path, os.path.join(static_folder, video_filename))
+
         session['completed_steps'].append('upload_data')
         return redirect(url_for('raw_data'))
     return render_template('upload_data.html')
@@ -134,20 +147,7 @@ def raw_data():
         session['completed_steps'].append('raw_data')
         return redirect(url_for('preprocessing'))
     return render_template('raw_data.html')   
-       
-    
 
-def clear_directory(directory):
-    """Removes all files in the specified directory."""
-    for filename in os.listdir(directory):
-        file_path = os.path.join(directory, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print(f'Failed to delete {file_path}. Reason: {e}')
 
 @app.route('/preprocessing', methods=['GET', 'POST'])
 def preprocessing():
@@ -156,23 +156,14 @@ def preprocessing():
     frame_offset = session.get('frame_offset')
     
     if request.method == 'POST':
-
-        # Clear the plot images directory
-        plot_dir = os.path.join(app.root_path, 'static', 'plots')
-        clear_directory(plot_dir)
-        
-        print(request.files)  # Debug: Print the files received
         accelerometer_file = request.files.get('accelerometer_file')
         gyroscope_file = request.files.get('gyroscope_file')
-        video_recording_file = request.files.get('video_recording_file')
+        
 
         if accelerometer_file and accelerometer_file.filename and gyroscope_file and gyroscope_file.filename:
-            #Check folder exists
-            upload_folder = os.path.join(app.config['SESSION_FILE_DIR'], 'uploads')
-            static_folder = os.path.join(app.root_path, 'static', 'session_data', 'uploads')
-            create_directory_if_not_exists(upload_folder)
-            create_directory_if_not_exists(static_folder)
-            session['static_folder_path'] = static_folder
+           # get the paths for the static and upload folders from session data, original from upload_data route
+            static_folder = session.get('static_folder_path')
+            upload_folder = session.get('upload_folder_path')
 
             # Secure the filenames and save the files
             accelerometer_filename = secure_filename(accelerometer_file.filename)
@@ -191,15 +182,7 @@ def preprocessing():
             print('Saved files to static folder correctly')
 
 
-            #If there is a video file (optional) it should be saved and copied as well   
-            video_filename = None
-            if video_recording_file and video_recording_file.filename:
-                video_filename = secure_filename(video_recording_file.filename)
-                video_file_path = os.path.join(upload_folder, video_filename)
-                session['video_file_path'] = video_file_path
-                session['video_filename'] = video_filename
-                video_recording_file.save(video_file_path)
-                shutil.copy(video_file_path, os.path.join(static_folder, video_filename))
+            video_filename = session.get('video_filename')
 
 
             # Add functionality that preprocesses the data that is uploaded
