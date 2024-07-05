@@ -129,6 +129,10 @@ def upload_data():
             video_recording_file.save(video_file_path)
             shutil.copy(video_file_path, os.path.join(static_folder, video_filename))
 
+            """
+            Implement video parsing here
+            """
+
         session['completed_steps'].append('upload_data')
         return redirect(url_for('raw_data'))
     return render_template('upload_data.html')
@@ -143,6 +147,9 @@ def raw_data():
 
         session['frame_size'] = frame_size
         session['frame_offset'] = frame_offset
+
+        accelorometer_file = session.get('accelerometer_file')
+        gyroscope_file = session.get('gyroscope_file')
 
         session['completed_steps'].append('raw_data')
         return redirect(url_for('preprocessing'))
@@ -174,6 +181,8 @@ def preprocessing():
             gyroscope_file_path = os.path.join(upload_folder, gyroscope_filename)
             accelerometer_file.save(accelerometer_file_path)
             gyroscope_file.save(gyroscope_file_path)
+
+            
             print('Saved files to upload folder correctly')
 
             # Copy the files to the static folder
