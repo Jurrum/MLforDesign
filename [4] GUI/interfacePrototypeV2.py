@@ -77,8 +77,8 @@ def setup():
     if request.method == 'POST':
         # In the setup get the Name of the product, frame size and offset
         product_name = request.form.get('product_name')
-        frame_offset = float(request.form.get('frame_offset'))
-        frame_size = float(request.form.get('frame_size'))
+        # frame_offset = float(request.form.get('frame_offset'))
+        # frame_size = float(request.form.get('frame_size'))
         active_iterations = int(request.form.get('active_learning_iterations'))
         labels = [value for key, value in request.form.items() if key.startswith('label_') and value]
 
@@ -86,8 +86,8 @@ def setup():
 
         # Store data in session
         session['product_name'] = product_name
-        session['frame_size'] = frame_size
-        session['frame_offset'] = frame_offset
+        # session['frame_size'] = frame_size
+        # session['frame_offset'] = frame_offset
         session['labels'] = labels
         session['active_learning_iterations'] = active_iterations
         session['label_submission_count'] = 0  # Initialize the counter
@@ -98,8 +98,44 @@ def setup():
 
 
         session['completed_steps'].append('setup')
-        return redirect(url_for('preprocessing'))
+        return redirect(url_for('upload_data'))
     return render_template('setup.html')
+
+"""
+Reroute pages as follows:
+- Setup --> Remove frames
+- Upload data --> Upload MP4 file
+- Look at raw data --> new page, initiate active learning
+- Active learning --> 
+- Resulst page
+"""
+
+@app.route('/upload_data', methods=['GET', 'POST'])
+def upload_data():
+    print("Accessed /upload_data route")  # Debug print
+
+    if request.method == 'POST':
+        
+        session['completed_steps'].append('upload_data')
+        return redirect(url_for('raw_data'))
+    return render_template('upload_data.html')
+
+@app.route('/raw_data', methods=['GET', 'POST'])
+def raw_data():
+    print("Accessed /raw_data route")  # Debug print
+
+    if request.method == 'POST':
+        frame_offset = float(request.form.get('frame_offset'))
+        frame_size = float(request.form.get('frame_size'))
+
+        session['frame_size'] = frame_size
+        session['frame_offset'] = frame_offset
+
+        session['completed_steps'].append('raw_data')
+        return redirect(url_for('preprocessing'))
+    return render_template('raw_data.html')   
+       
+    
 
 def clear_directory(directory):
     """Removes all files in the specified directory."""

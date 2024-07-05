@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Setup{% endblock %}
+
+{% block content %}
+
+<section>
+    <h1>Step 3: Raw data</h1>
+
+        <section>
+            <p>Look at this timeline and see what your raw data values look like</p>
+            <p><br> Each </p>
+            <a></a>
+        </section>
+   
+        <!-- Input field for frame size with decimals allowed and range set -->
+        <label for="frame_size">Time for each Action in seconds (Frame Size):</label>
+        <input type="number" id="frame_size" name="frame_size" min="0" max="100" step="1" required><br><br>
+
+        <!-- Input field for frame offset with decimals allowed and range set -->
+        <label for="frame_offset">Overlay in seconds (Frame Offset):</label>
+        <input type="number" id="frame_offset" name="frame_offset" min="0" max="100" step="0.5" required><br><br>
+</section>
+
+<script src="{{ url_for('static', filename='raw_data.js') }}"></script>
+
+    
+     
+
+{% endblock %}
